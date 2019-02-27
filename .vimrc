@@ -21,8 +21,14 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'pangloss/vim-javascript'
-Plugin 'SQLComplete.vim'
+Plugin 'mxw/vim-jsx'
 Plugin 'scrooloose/nerdtree'
+Plugin 'Yggdroot/indentLine'
+Plugin 'itchyny/vim-haskell-indent'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'tpope/vim-fugitive'
+
 " Plugin 'scrooloose/syntastic' " Plugin 'venantius/vim-eastwood'
 
 
@@ -38,6 +44,10 @@ let g:ycm_auto_trigger = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 let g:airline#extensions#tabline#enabled = 1
+
+" don't conceal in MD
+let g:pandoc#syntax#conceal#use = 0
+
 
 " Enable gcc syntax checker and get rid of ycm syntax
 " let g:syntastic_cpp_checkers = ['gcc']
@@ -69,6 +79,10 @@ set number
 set cursorline
 set hlsearch
 set autowrite
+set statusline +=\ %{fugitive#statusline()}
+set clipboard=unnamed 
+" use system clipboard
+
 
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 autocmd FileType clj call rainbow#load()
@@ -79,4 +93,17 @@ au BufNewFile,BufRead *.cql set filetype=sql
 
 
 map <F7> mzgg=G`z
+" for moveing around window pains
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+" Clear highlighting on escape in normal mode
+nnoremap <esc> :noh<return><esc>
+nnoremap <esc>^[ <esc>^[
 
