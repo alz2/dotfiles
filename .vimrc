@@ -28,6 +28,9 @@ Plugin 'itchyny/vim-haskell-indent'
 Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'tpope/vim-fugitive'
+Plugin 'xolox/vim-colorscheme-switcher'
+Plugin 'xolox/vim-misc'
+Plugin 'alvan/vim-closetag'
 
 " Plugin 'scrooloose/syntastic' " Plugin 'venantius/vim-eastwood'
 
@@ -41,7 +44,10 @@ let g:cpp_member_variable_highlight = 1
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_python_binary_path = '/usr/bin/python'
 let g:ycm_auto_trigger = 1
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf_standard.py'
+let g:max_diagnostics_to_display = 0 " no limit to errors
+let g:ycm_warning_symbol = '!'
+
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -57,6 +63,8 @@ let g:pandoc#syntax#conceal#use = 0
 let g:rainbow_active = 0
 
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" for auto and decltype
+map t :YcmCompleter GetType <CR>
 
 
 set backspace=2 " make backspace work like most other apps
@@ -80,12 +88,15 @@ set cursorline
 set hlsearch
 set autowrite
 set statusline +=\ %{fugitive#statusline()}
-set clipboard=unnamed 
+
 " use system clipboard
+" set clipboard=unnamed 
 
 
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " close NT if last
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 autocmd FileType clj call rainbow#load()
+autocmd FileType hs call rainbow#load()
 autocmd BufNewFile,BufRead *.s   set syntax=mips
 autocmd BufNewFile,BufRead *.s   set noexpandtab shiftwidth=8 softtabstop=0
 au BufNewFile,BufRead *.ejs set filetype=html
@@ -93,11 +104,14 @@ au BufNewFile,BufRead *.cql set filetype=sql
 
 
 map <F7> mzgg=G`z
-" for moveing around window pains
+" for moving around window pains
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
+" Shortcut for Nerdtree
+map <C-n> :NERDTreeToggle<CR>
 
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
