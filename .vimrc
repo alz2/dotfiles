@@ -69,8 +69,6 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 map <leader>f  :FormatCode<CR>
 " for auto and decltype
 map t :YcmCompleter GetType <CR>
-map 
-
 
 set backspace=2 " make backspace work like most other apps
 
