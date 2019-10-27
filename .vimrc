@@ -31,14 +31,25 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'xolox/vim-misc'
 Plugin 'alvan/vim-closetag'
-
-" Plugin 'scrooloose/syntastic' " Plugin 'venantius/vim-eastwood'
-
-
+Plugin 'kien/ctrlp.vim'
+" Add maktaba and codefmt to the runtimepath.
+" (The latter must be installed before it can be used.)
+Plugin 'google/vim-maktaba'
+Plugin 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plugin 'google/vim-glaive'
 
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+" the glaive#Install() should go after the "call vundle#end()"
+call glaive#Install()
+" Optional: Enable codefmt's default mappings on the <Leader>= prefix.
+Glaive codefmt plugin[mappings]
+Glaive codefmt google_java_executable="java -jar /path/to/google-java-format-VERSION-all-deps.jar"
+
 
 let g:cpp_member_variable_highlight = 1
 let g:ycm_autoclose_preview_window_after_completion=1
@@ -47,24 +58,18 @@ let g:ycm_auto_trigger = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf_standard.py'
 let g:max_diagnostics_to_display = 0 " no limit to errors
 let g:ycm_warning_symbol = '!'
-
-
 let g:airline#extensions#tabline#enabled = 1
-
 " don't conceal in MD
 let g:pandoc#syntax#conceal#use = 0
-
-
-" Enable gcc syntax checker and get rid of ycm syntax
-" let g:syntastic_cpp_checkers = ['gcc']
-" let g:ycm_show_diagnostics_ui = 0
-
-
 let g:rainbow_active = 0
 
+
+let mapleader=" "
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+map <leader>f  :FormatCode<CR>
 " for auto and decltype
 map t :YcmCompleter GetType <CR>
+map 
 
 
 set backspace=2 " make backspace work like most other apps
