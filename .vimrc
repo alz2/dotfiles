@@ -32,6 +32,8 @@ Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'xolox/vim-misc'
 Plugin 'alvan/vim-closetag'
 Plugin 'kien/ctrlp.vim'
+Plugin 'vim-python/python-syntax'
+
 " Add maktaba and codefmt to the runtimepath.
 " (The latter must be installed before it can be used.)
 Plugin 'google/vim-maktaba'
@@ -51,6 +53,7 @@ Glaive codefmt plugin[mappings]
 Glaive codefmt google_java_executable="java -jar /path/to/google-java-format-VERSION-all-deps.jar"
 
 
+let g:python_highlight_all = 1
 let g:cpp_member_variable_highlight = 1
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_python_binary_path = '/usr/bin/python'
@@ -77,11 +80,11 @@ set background=dark
 colorscheme jellybeans
 
 " show existing tab with 4 spaces width
-set tabstop=4
+set tabstop=2
 " when indenting with '>', use 4 spaces width
-set shiftwidth=4
+set shiftwidth=2
 " On pressing tab, insert 4 spaces
-set softtabstop=4
+set softtabstop=2
 set expandtab
 set smarttab
 set autoindent
