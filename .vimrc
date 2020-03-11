@@ -65,11 +65,12 @@ let g:airline#extensions#tabline#enabled = 1
 " don't conceal in MD
 let g:pandoc#syntax#conceal#use = 0
 let g:rainbow_active = 0
-
+let g:ctrlp_working_path_mode = 0
 
 let mapleader=" "
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 map <leader>f  :FormatCode<CR>
+map <leader>F  :YcmCompleter FixIt<CR>
 " for auto and decltype
 map t :YcmCompleter GetType <CR>
 
