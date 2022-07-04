@@ -41,6 +41,8 @@ Plugin 'google/vim-codefmt'
 " Also add Glaive, which is used to configure codefmt's maktaba flags. See
 " `:help :Glaive` for usage.
 Plugin 'google/vim-glaive'
+Plugin 'bazelbuild/vim-bazel'
+" Plugin 'grailbio/bazel-compilation-database'
 
 " " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -51,6 +53,20 @@ call glaive#Install()
 " Optional: Enable codefmt's default mappings on the <Leader>= prefix.
 Glaive codefmt plugin[mappings]
 Glaive codefmt google_java_executable="java -jar /path/to/google-java-format-VERSION-all-deps.jar"
+
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+  autocmd FileType rust AutoFormatBuffer rustfmt
+  autocmd FileType vue AutoFormatBuffer prettier
+augroup END
 
 
 let g:python_highlight_all = 1
@@ -69,7 +85,7 @@ let g:ctrlp_working_path_mode = 0
 
 let mapleader=" "
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-map <leader>f  :FormatCode<CR>
+map <leader>f  :FormatCode <CR>
 map <leader>F  :YcmCompleter FixIt<CR>
 " for auto and decltype
 map t :YcmCompleter GetType <CR>
@@ -78,7 +94,8 @@ set backspace=2 " make backspace work like most other apps
 
 syntax enable
 set background=dark
-colorscheme jellybeans
+" colorscheme jellybeans
+colorscheme gruvbox
 
 " show existing tab with 4 spaces width
 set tabstop=2
@@ -128,3 +145,22 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 nnoremap <esc> :noh<return><esc>
 nnoremap <esc>^[ <esc>^[
 
+
+let g:ycm_filetype_specific_completion_to_disable = { 'cpp':1 }
+" let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+
+
+packloadall
