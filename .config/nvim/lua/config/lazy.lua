@@ -25,6 +25,13 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   {
+    "rebelot/kanagawa.nvim",
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme("kanagawa")
+    end,
+  },
+  {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -41,6 +48,9 @@ require("lazy").setup({
           },
           sorting_strategy = "ascending",
           path_display = { "smart" },
+          file_ignore_patterns = {
+            "%.git/",
+          },
         },
         pickers = {
           find_files = {
