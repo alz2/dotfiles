@@ -23,6 +23,13 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function()
+    vim.api.nvim_set_hl(0, "IblIndent", { link = "Whitespace", default = true })
+    vim.api.nvim_set_hl(0, "IblScope", { link = "Comment", default = true })
+  end,
+})
+
 require("lazy").setup({
   {
     "rebelot/kanagawa.nvim",
@@ -67,10 +74,55 @@ require("lazy").setup({
     end,
   },
   {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      require("ibl").setup({
+        indent = {
+          char = "│",
+          repeat_linebreak = true,
+        },
+        scope = {
+          enabled = true,
+          char = "│",
+          show_start = false,
+          show_end = false,
+        },
+      })
+    end,
+  },
+  {
+    "mason-org/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
+  },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      vim.lsp.config("gopls", {})
+    end,
+  },
+  {
+    "mason-org/mason-lspconfig.nvim",
+    dependencies = {
+      "mason-org/mason.nvim",
+      "neovim/nvim-lspconfig",
+    },
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "gopls" },
+        automatic_enable = { "gopls" },
+      })
+    end,
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     build = function()
       require("nvim-treesitter").install({
         "bash",
+        "go",
         "json",
         "lua",
         "markdown",
@@ -85,6 +137,7 @@ require("lazy").setup({
       vim.api.nvim_create_autocmd("FileType", {
         pattern = {
           "bash",
+          "go",
           "json",
           "lua",
           "markdown",
