@@ -101,7 +101,31 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.config("gopls", {})
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            semanticTokens = true,
+          },
+        },
+      })
+    end,
+  },
+  {
+    "ray-x/go.nvim",
+    ft = { "go", "gomod", "gosum", "gowork", "gotmpl", "gohtmltmpl" },
+    dependencies = {
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      goimports = "gopls",
+      lsp_semantic_highlights = true,
+      lsp_cfg = false,
+      lsp_keymaps = false,
+    },
+    config = function(_, opts)
+      require("go").setup(opts)
     end,
   },
   {
@@ -123,10 +147,14 @@ require("lazy").setup({
       require("nvim-treesitter").install({
         "bash",
         "go",
+        "gomod",
+        "gosum",
         "json",
         "lua",
         "markdown",
         "markdown_inline",
+        "gotmpl",
+        "gohtmltmpl",
         "query",
         "vim",
         "vimdoc",
@@ -138,6 +166,11 @@ require("lazy").setup({
         pattern = {
           "bash",
           "go",
+          "gomod",
+          "gosum",
+          "gowork",
+          "gotmpl",
+          "gohtmltmpl",
           "json",
           "lua",
           "markdown",

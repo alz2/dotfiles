@@ -11,33 +11,13 @@ vim.keymap.set("n", "<leader>t", function()
     return
   end
 
-  local dir = vim.fn.expand("%:p:h")
-  local output = {}
+  local ok, err = pcall(vim.cmd, "GoTest")
 
-  vim.notify("Running go test in " .. dir, vim.log.levels.INFO)
-
-  vim.system({ "go", "test", "." }, { cwd = dir, text = true }, function(result)
-    if result.stdout and result.stdout ~= "" then
-      table.insert(output, result.stdout)
-    end
-    if result.stderr and result.stderr ~= "" then
-      table.insert(output, result.stderr)
-    end
-
-    vim.schedule(function()
-      local message = table.concat(output, "\n")
-
-      if result.code == 0 then
-        vim.notify(message ~= "" and message or "go test passed", vim.log.levels.INFO, {
-          title = "go test",
-        })
-      else
-        vim.notify(message ~= "" and message or "go test failed", vim.log.levels.ERROR, {
-          title = "go test",
-        })
-      end
-    end)
-  end)
+  if not ok then
+    vim.notify(err or "Failed to run GoTest", vim.log.levels.ERROR, {
+      title = "go test",
+    })
+  end
 end, { desc = "Run go test for current package" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -57,7 +37,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
           return
         end
 
-        local location = vim.tbl_islist(result) and result[1] or result
+        local location = vim.islist(result) and result[1] or result
         vim.lsp.util.jump_to_location(location, "utf-8", true)
       end)
     end
@@ -88,7 +68,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
     local view = vim.fn.winsaveview()
-    vim.cmd("silent keepjumps keepmarks %!gofmt")
+    pcall(function()
+      require("go.format").goimports()
+    end)
     vim.fn.winrestview(view)
   end,
 })
