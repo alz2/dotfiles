@@ -12,6 +12,11 @@ opt.splitright = true
 opt.splitbelow = true
 opt.scrolloff = 8
 opt.clipboard = "unnamedplus"
+opt.expandtab = true
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.softtabstop = 2
+opt.smarttab = true
 
 local function update_numberwidth()
   local line_count = vim.api.nvim_buf_line_count(0)
