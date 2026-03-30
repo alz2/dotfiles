@@ -1,4 +1,5 @@
 {
+  "gitsigns.nvim": { "branch": "main", "commit": "50c205548d8b037b7ff6378fca6d21146f0b6161" },
   "go.nvim": { "branch": "master", "commit": "51a6f3b19b59f6e8e5d8d06aa23704ff2b6ed6bd" },
   "guihua.lua": { "branch": "master", "commit": "fdca486468a5d94676477917872767b5e67a2b4c" },
   "indent-blankline.nvim": { "branch": "master", "commit": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03" },
