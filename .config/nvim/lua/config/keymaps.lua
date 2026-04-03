@@ -23,8 +23,11 @@ end, { desc = "Run go test for current package" })
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local opts = { buffer = args.buf }
+    local client = args.data and args.data.client_id and vim.lsp.get_client_by_id(args.data.client_id) or nil
+    local position_encoding = (client and client.offset_encoding) or "utf-16"
+
     local function goto_definition()
-      local params = vim.lsp.util.make_position_params()
+      local params = vim.lsp.util.make_position_params(0, position_encoding)
 
       vim.lsp.buf_request(args.buf, "textDocument/definition", params, function(err, result)
         if err then
@@ -38,7 +41,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         local location = vim.islist(result) and result[1] or result
-        vim.lsp.util.jump_to_location(location, "utf-8", true)
+        local opened = vim.lsp.util.show_document(location, position_encoding, {
+          focus = true,
+          reuse_win = true,
+        })
+
+        if not opened then
+          vim.notify("Failed to open definition location", vim.log.levels.WARN)
+        end
       end)
     end
 
