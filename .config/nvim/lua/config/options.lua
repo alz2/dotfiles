@@ -1,7 +1,7 @@
 local opt = vim.opt
 
 opt.number = true
-opt.mouse = "a"
+opt.mouse = "r"
 opt.ignorecase = true
 opt.smartcase = true
 opt.termguicolors = true
