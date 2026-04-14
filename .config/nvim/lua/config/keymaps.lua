@@ -60,6 +60,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end, vim.tbl_extend("force", opts, {
       desc = "Go to references",
     }))
+    vim.keymap.set("n", "<leader>gi", function()
+      local ok, builtin = pcall(require, "telescope.builtin")
+      if ok then
+        builtin.lsp_implementations()
+        return
+      end
+      vim.lsp.buf.implementation()
+    end, vim.tbl_extend("force", opts, {
+      desc = "Go to implementations",
+    }))
     vim.keymap.set("n", "<leader>cr", function()
       vim.lsp.buf.rename()
     end, vim.tbl_extend("force", opts, {
