@@ -258,6 +258,30 @@ require("lazy").setup({
     end,
   },
   {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {
+      anti_conceal = {
+        enabled = false,
+      },
+      sign = {
+        enabled = false,
+      },
+      heading = {
+        icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " },
+      },
+      completions = {
+        lsp = {
+          enabled = true,
+        },
+      },
+    },
+    keys = {
+      { "<leader>mr", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle markdown render" },
+    },
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     build = function()
       require("nvim-treesitter").install({
