@@ -191,6 +191,22 @@ require("lazy").setup({
     end,
   },
   {
+    "lervag/vimtex",
+    lazy = false,
+    init = function()
+      vim.g.tex_flavor = "latex"
+      vim.g.vimtex_compiler_method = "latexmk"
+
+      if vim.uv.fs_stat("/Applications/Skim.app") then
+        vim.g.vimtex_view_method = "skim"
+      else
+        vim.g.vimtex_view_method = "general"
+        vim.g.vimtex_view_general_viewer = "open"
+        vim.g.vimtex_view_general_options = "@pdf"
+      end
+    end,
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
@@ -203,6 +219,10 @@ require("lazy").setup({
             semanticTokens = true,
           },
         },
+      })
+
+      vim.lsp.config("texlab", {
+        capabilities = capabilities,
       })
     end,
   },
@@ -232,8 +252,8 @@ require("lazy").setup({
     },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "gopls" },
-        automatic_enable = { "gopls" },
+        ensure_installed = { "gopls", "texlab" },
+        automatic_enable = { "gopls", "texlab" },
       })
     end,
   },
@@ -246,6 +266,7 @@ require("lazy").setup({
         "gomod",
         "gosum",
         "json",
+        "latex",
         "lua",
         "markdown",
         "markdown_inline",
@@ -258,6 +279,8 @@ require("lazy").setup({
       }, { summary = true }):wait(300000)
     end,
     config = function()
+      vim.treesitter.language.add("latex", { filetype = "tex" })
+
       vim.api.nvim_create_autocmd("FileType", {
         pattern = {
           "bash",
@@ -271,6 +294,7 @@ require("lazy").setup({
           "lua",
           "markdown",
           "query",
+          "tex",
           "vim",
           "yaml",
         },

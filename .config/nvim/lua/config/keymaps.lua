@@ -99,3 +99,78 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.fn.winrestview(view)
   end,
 })
+
+local latexindent_missing_notified = false
+
+local function format_latex(bufnr)
+  if vim.fn.executable("latexindent") == 0 then
+    if not latexindent_missing_notified then
+      vim.notify("latexindent is not installed; skipping LaTeX format on save", vim.log.levels.WARN, {
+        title = "latex",
+      })
+      latexindent_missing_notified = true
+    end
+    return
+  end
+
+  local view = vim.fn.winsaveview()
+  local tmp = vim.fn.tempname() .. ".tex"
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local ok = vim.fn.writefile(lines, tmp) == 0
+
+  if not ok then
+    vim.notify("Failed to write temporary file for latexindent", vim.log.levels.ERROR, {
+      title = "latex",
+    })
+    return
+  end
+
+  local cwd = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":p:h")
+  local result = vim.system({ "latexindent", "-g", "/dev/null", tmp }, {
+    cwd = cwd ~= "" and cwd or nil,
+    text = true,
+  }):wait()
+  vim.fn.delete(tmp)
+
+  if result.code ~= 0 then
+    vim.notify(result.stderr ~= "" and result.stderr or "latexindent failed", vim.log.levels.ERROR, {
+      title = "latex",
+    })
+    return
+  end
+
+  local formatted = vim.split(result.stdout, "\n", { plain = true })
+  if formatted[#formatted] == "" then
+    table.remove(formatted)
+  end
+
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted)
+  vim.fn.winrestview(view)
+end
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.tex",
+  callback = function(args)
+    format_latex(args.buf)
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "tex",
+  callback = function(args)
+    local opts = { buffer = args.buf }
+
+    vim.keymap.set("n", "<leader>lc", "<cmd>VimtexCompile<cr>", vim.tbl_extend("force", opts, {
+      desc = "Compile LaTeX",
+    }))
+    vim.keymap.set("n", "<leader>lv", "<cmd>VimtexView<cr>", vim.tbl_extend("force", opts, {
+      desc = "View LaTeX PDF",
+    }))
+    vim.keymap.set("n", "<leader>lk", "<cmd>VimtexStop<cr>", vim.tbl_extend("force", opts, {
+      desc = "Stop LaTeX compiler",
+    }))
+    vim.keymap.set("n", "<leader>le", "<cmd>VimtexErrors<cr>", vim.tbl_extend("force", opts, {
+      desc = "Show LaTeX errors",
+    }))
+  end,
+})
