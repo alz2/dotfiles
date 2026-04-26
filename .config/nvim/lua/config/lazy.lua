@@ -54,7 +54,7 @@ require("lazy").setup({
             prompt_position = "top",
           },
           sorting_strategy = "ascending",
-          path_display = { "smart" },
+          path_display = { "truncate" },
           file_ignore_patterns = {
             "%.git/",
           },
