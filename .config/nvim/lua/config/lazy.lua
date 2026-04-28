@@ -57,6 +57,7 @@ require("lazy").setup({
           path_display = { "truncate" },
           file_ignore_patterns = {
             "%.git/",
+            "%.claude/worktrees/",
           },
         },
         pickers = {
