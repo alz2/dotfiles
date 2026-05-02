@@ -47,6 +47,11 @@ require("lazy").setup({
       local telescope = require("telescope")
       local builtin = require("telescope.builtin")
 
+      local file_ignore_patterns = { "%.git/" }
+      if not (vim.uv.cwd() or ""):find("%.claude/worktrees/") then
+        table.insert(file_ignore_patterns, "%.claude/worktrees/")
+      end
+
       telescope.setup({
         defaults = {
           layout_strategy = "horizontal",
@@ -55,10 +60,7 @@ require("lazy").setup({
           },
           sorting_strategy = "ascending",
           path_display = { "truncate" },
-          file_ignore_patterns = {
-            "%.git/",
-            "%.claude/worktrees/",
-          },
+          file_ignore_patterns = file_ignore_patterns,
         },
         pickers = {
           find_files = {
