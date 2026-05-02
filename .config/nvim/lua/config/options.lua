@@ -11,7 +11,6 @@ opt.timeoutlen = 300
 opt.splitright = true
 opt.splitbelow = true
 opt.scrolloff = 8
-opt.clipboard = "unnamedplus"
 opt.expandtab = true
 opt.tabstop = 2
 opt.shiftwidth = 2
