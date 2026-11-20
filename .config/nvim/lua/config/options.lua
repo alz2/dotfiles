@@ -6,6 +6,8 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.termguicolors = true
 opt.signcolumn = "auto:1"
+-- ponytail: iTerm mis-renders synchronized output (stale chars after `o`). Re-enable if iTerm fixes it.
+opt.termsync = false
 opt.updatetime = 250
 opt.timeoutlen = 300
 opt.splitright = true
@@ -17,12 +19,9 @@ opt.shiftwidth = 2
 opt.softtabstop = 2
 opt.smarttab = true
 
-local function update_numberwidth()
-  local line_count = vim.api.nvim_buf_line_count(0)
-  local width = math.max(1, #tostring(line_count))
-  vim.opt_local.numberwidth = width
-end
-
-vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter", "TextChanged", "TextChangedI", "BufWritePost" }, {
-  callback = update_numberwidth,
-})
+-- Keep the number column as narrow as possible. numberwidth is only a minimum;
+-- Neovim auto-expands it to fit the largest line number, so 1 yields a gutter
+-- that is always exactly wide enough. (Recomputing this per-keystroke in a
+-- TextChangedI autocmd previously resized the gutter mid-redraw, which could
+-- paint a typed character into the number column.)
+opt.numberwidth = 1
